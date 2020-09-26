@@ -9,10 +9,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Start an uninitialized segment at $80 for var declaration.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    seg.u Variables
-    org $80
-P0Height .byte     ; defines one byte for player 0 height
-P1Height .byte     ; defines one byte for player 1 height
+    seg.u Variables ; define variable names
+    org $80         ; we usually start our segment in this location memory 
+P0Height .byte      ; defines one byte for player 0 height
+P1Height .byte      ; defines one byte for player 1 height
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Start our ROM code segment starting at $F000.
@@ -139,7 +139,7 @@ Player1Loop:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Draw the remaining 102 scanlines (192-90), since we already
-;; used 10+10+50+10+10=80 scanlines in the current frame.
+;; used 10+10+50+10+10=90 scanlines in the current frame.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     REPEAT 102
         sta WSYNC
