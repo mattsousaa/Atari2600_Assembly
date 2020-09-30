@@ -24,13 +24,13 @@ P0XPos   .byte      ; sprite X coordinate
 Reset:
     CLEAN_START    ; macro to clean memory and TIA
 
-    ldx #$00       ; black background color
+    ldx #$88       ; light purple background color
     stx COLUBK
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialize variables
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    lda #50
+    lda #40
     sta P0XPos     ; initialize player X coordinate
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -76,12 +76,11 @@ DivideLoop:
     sta HMOVE      ; apply the fine position offset (apply changes)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Let the TIA output the 37 recommended lines of VBLANK
+;; Let the TIA output the remaining 35 lines of VBLANK (37 - 2)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    REPEAT 37
+    REPEAT 35
         sta WSYNC
     REPEND
-
     lda #0
     sta VBLANK     ; turn VBLANK off
 
@@ -123,9 +122,17 @@ Overscan:
     REPEND
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Increment X coordinate before next frame for animation.
+;; Increment X coordinate if we are between 40 and 80 pixels
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    inc P0XPos     ; The little balloon will slide to the right
+    lda P0XPos     ; load A with the player current X position
+    cmp #80        ; compare the value with 80
+    bpl ResetXPos  ; if A is greater, then reset position
+    jmp IncrmXPos  ; else, continue to increment the position
+ResetXPos:
+    lda #40
+    sta P0XPos     ; reset the player X position to 40
+IncrmXPos:
+    inc P0XPos     ; increment the player X position
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loop to next frame

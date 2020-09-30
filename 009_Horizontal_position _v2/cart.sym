@@ -22,7 +22,7 @@ CXP0FB                   0002
 CXP1FB                   0003                  
 CXPPMM                   0007                  
 DivideLoop               f02c              (R )
-DrawBitmap               f106              (R )
+DrawBitmap               f102              (R )
 ENABL                    001f                  
 ENAM0                    001d                  
 ENAM1                    001e                  
@@ -35,6 +35,7 @@ HMM1                     0023
 HMOVE                    002a              (R )
 HMP0                     0020              (R )
 HMP1                     0021                  
+IncrmXPos                f25a              (R )
 INPT0                    0008                  
 INPT1                    0009                  
 INPT2                    000a                  
@@ -44,9 +45,9 @@ INPT5                    000d
 INTIM                    0284                  
 NUSIZ0                   0004                  
 NUSIZ1                   0005                  
-Overscan                 f211                  
-P0Bitmap                 f256              (R )
-P0Color                  f25f              (R )
+Overscan                 f20d                  
+P0Bitmap                 f25f              (R )
+P0Color                  f268              (R )
 P0XPos                   0080              (R )
 PF0                      000d                  
 PF1                      000e                  
@@ -55,6 +56,7 @@ REFP0                    000b
 REFP1                    000c                  
 RESBL                    0014                  
 Reset                    f000              (R )
+ResetXPos                f256              (R )
 RESM0                    0012                  
 RESM1                    0013                  
 RESMP0                   0028                  
