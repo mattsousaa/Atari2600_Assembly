@@ -18,7 +18,7 @@ Reset:
     txs            ; transfer X register to S(tack) register
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Add/Push for values to the stack
+;; Add/Push four values to the stack
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;   
     lda #$AA
 
