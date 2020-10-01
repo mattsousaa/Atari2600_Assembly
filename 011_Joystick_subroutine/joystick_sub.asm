@@ -51,6 +51,9 @@ StartFrame:
     sta WSYNC
     sta HMOVE                ; apply the horizontal offsets previously set
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Start a new frame by configuring VBLANK and VSYNC
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     lda #2
     sta VBLANK               ; turn VBLANK on
     sta VSYNC                ; turn VSYNC on
