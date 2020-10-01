@@ -1,4 +1,4 @@
-------- FILE joystick_in.asm LEVEL 1 PASS 2
+------- FILE joystick_sub.asm LEVEL 1 PASS 2
       1  fffe					      processor	6502
       2  10000 ????
       3  10000 ????						;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -206,7 +206,7 @@
     198  0000 ????				      SEG
     199  0000 ????
     200  0000 ????						; EOF
-------- FILE joystick_in.asm
+------- FILE joystick_sub.asm
 ------- FILE macro.h LEVEL 2 PASS 2
       0  0000 ????				      include	"macro.h"
       1  0000 ????						; MACRO.H
@@ -372,7 +372,7 @@
     161  0000 ????
     162  0000 ????
     163  0000 ????						; EOF
-------- FILE joystick_in.asm
+------- FILE joystick_sub.asm
       8  0000 ????
       9  0000 ????						;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
      10  0000 ????						;; Start an uninitialized segment at $80 for var declaration.
@@ -430,658 +430,661 @@
      51  f01e		       85 02		      sta	WSYNC
      52  f020		       85 2a		      sta	HMOVE	; apply the horizontal offsets previously set
      53  f022
-     54  f022		       a9 02		      lda	#2
-     55  f024		       85 01		      sta	VBLANK	; turn VBLANK on
-     56  f026		       85 00		      sta	VSYNC	; turn VSYNC on
-     57  f028
-     58  f028							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     59  f028							;; Display 3 vertical lines of VSYNC
-     60  f028							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     61  f028					      REPEAT	3
-     62  f028		       85 02		      sta	WSYNC	; first three VSYNC scanlines
-     61  f028					      REPEND
-     62  f02a		       85 02		      sta	WSYNC	; first three VSYNC scanlines
-     61  f02a					      REPEND
-     62  f02c		       85 02		      sta	WSYNC	; first three VSYNC scanlines
-     63  f02e					      REPEND
-     64  f02e		       a9 00		      lda	#0
-     65  f030		       85 00		      sta	VSYNC	; turn VSYNC off
-     66  f032
-     67  f032							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     68  f032							;; Let the TIA output the remaining 35 lines of VBLANK (37 - 2)
-     69  f032							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     70  f032					      REPEAT	35
-     71  f032		       85 02		      sta	WSYNC
-     70  f032					      REPEND
-     71  f034		       85 02		      sta	WSYNC
-     70  f034					      REPEND
-     71  f036		       85 02		      sta	WSYNC
-     70  f036					      REPEND
-     71  f038		       85 02		      sta	WSYNC
-     70  f038					      REPEND
-     71  f03a		       85 02		      sta	WSYNC
-     70  f03a					      REPEND
-     71  f03c		       85 02		      sta	WSYNC
-     70  f03c					      REPEND
-     71  f03e		       85 02		      sta	WSYNC
-     70  f03e					      REPEND
-     71  f040		       85 02		      sta	WSYNC
-     70  f040					      REPEND
-     71  f042		       85 02		      sta	WSYNC
-     70  f042					      REPEND
-     71  f044		       85 02		      sta	WSYNC
-     70  f044					      REPEND
-     71  f046		       85 02		      sta	WSYNC
-     70  f046					      REPEND
-     71  f048		       85 02		      sta	WSYNC
-     70  f048					      REPEND
-     71  f04a		       85 02		      sta	WSYNC
-     70  f04a					      REPEND
-     71  f04c		       85 02		      sta	WSYNC
-     70  f04c					      REPEND
-     71  f04e		       85 02		      sta	WSYNC
-     70  f04e					      REPEND
-     71  f050		       85 02		      sta	WSYNC
-     70  f050					      REPEND
-     71  f052		       85 02		      sta	WSYNC
-     70  f052					      REPEND
-     71  f054		       85 02		      sta	WSYNC
-     70  f054					      REPEND
-     71  f056		       85 02		      sta	WSYNC
-     70  f056					      REPEND
-     71  f058		       85 02		      sta	WSYNC
-     70  f058					      REPEND
-     71  f05a		       85 02		      sta	WSYNC
-     70  f05a					      REPEND
-     71  f05c		       85 02		      sta	WSYNC
-     70  f05c					      REPEND
-     71  f05e		       85 02		      sta	WSYNC
-     70  f05e					      REPEND
-     71  f060		       85 02		      sta	WSYNC
-     70  f060					      REPEND
-     71  f062		       85 02		      sta	WSYNC
-     70  f062					      REPEND
-     71  f064		       85 02		      sta	WSYNC
-     70  f064					      REPEND
-     71  f066		       85 02		      sta	WSYNC
-     70  f066					      REPEND
-     71  f068		       85 02		      sta	WSYNC
-     70  f068					      REPEND
-     71  f06a		       85 02		      sta	WSYNC
-     70  f06a					      REPEND
-     71  f06c		       85 02		      sta	WSYNC
-     70  f06c					      REPEND
-     71  f06e		       85 02		      sta	WSYNC
-     70  f06e					      REPEND
-     71  f070		       85 02		      sta	WSYNC
-     70  f070					      REPEND
-     71  f072		       85 02		      sta	WSYNC
-     70  f072					      REPEND
-     71  f074		       85 02		      sta	WSYNC
-     70  f074					      REPEND
-     71  f076		       85 02		      sta	WSYNC
-     72  f078					      REPEND
-     73  f078		       a9 00		      lda	#0
-     74  f07a		       85 01		      sta	VBLANK	; turn VBLANK off
-     75  f07c
-     76  f07c							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     77  f07c							;; Draw the 192 visible scanlines
-     78  f07c							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-     79  f07c					      REPEAT	160
-     80  f07c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f07c					      REPEND
-     80  f07e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f07e					      REPEND
-     80  f080		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f080					      REPEND
-     80  f082		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f082					      REPEND
-     80  f084		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f084					      REPEND
-     80  f086		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f086					      REPEND
-     80  f088		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f088					      REPEND
-     80  f08a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f08a					      REPEND
-     80  f08c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f08c					      REPEND
-     80  f08e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f08e					      REPEND
-     80  f090		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f090					      REPEND
-     80  f092		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f092					      REPEND
-     80  f094		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f094					      REPEND
-     80  f096		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f096					      REPEND
-     80  f098		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f098					      REPEND
-     80  f09a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f09a					      REPEND
-     80  f09c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f09c					      REPEND
-     80  f09e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f09e					      REPEND
-     80  f0a0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0a0					      REPEND
-     80  f0a2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0a2					      REPEND
-     80  f0a4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0a4					      REPEND
-     80  f0a6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0a6					      REPEND
-     80  f0a8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0a8					      REPEND
-     80  f0aa		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0aa					      REPEND
-     80  f0ac		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0ac					      REPEND
-     80  f0ae		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0ae					      REPEND
-     80  f0b0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0b0					      REPEND
-     80  f0b2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0b2					      REPEND
-     80  f0b4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0b4					      REPEND
-     80  f0b6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0b6					      REPEND
-     80  f0b8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0b8					      REPEND
-     80  f0ba		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0ba					      REPEND
-     80  f0bc		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0bc					      REPEND
-     80  f0be		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0be					      REPEND
-     80  f0c0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0c0					      REPEND
-     80  f0c2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0c2					      REPEND
-     80  f0c4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0c4					      REPEND
-     80  f0c6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0c6					      REPEND
-     80  f0c8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0c8					      REPEND
-     80  f0ca		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0ca					      REPEND
-     80  f0cc		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0cc					      REPEND
-     80  f0ce		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0ce					      REPEND
-     80  f0d0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0d0					      REPEND
-     80  f0d2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0d2					      REPEND
-     80  f0d4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0d4					      REPEND
-     80  f0d6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0d6					      REPEND
-     80  f0d8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0d8					      REPEND
-     80  f0da		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0da					      REPEND
-     80  f0dc		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0dc					      REPEND
-     80  f0de		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0de					      REPEND
-     80  f0e0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0e0					      REPEND
-     80  f0e2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0e2					      REPEND
-     80  f0e4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0e4					      REPEND
-     80  f0e6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0e6					      REPEND
-     80  f0e8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0e8					      REPEND
-     80  f0ea		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0ea					      REPEND
-     80  f0ec		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0ec					      REPEND
-     80  f0ee		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0ee					      REPEND
-     80  f0f0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0f0					      REPEND
-     80  f0f2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0f2					      REPEND
-     80  f0f4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0f4					      REPEND
-     80  f0f6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0f6					      REPEND
-     80  f0f8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0f8					      REPEND
-     80  f0fa		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0fa					      REPEND
-     80  f0fc		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0fc					      REPEND
-     80  f0fe		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f0fe					      REPEND
-     80  f100		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f100					      REPEND
-     80  f102		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f102					      REPEND
-     80  f104		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f104					      REPEND
-     80  f106		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f106					      REPEND
-     80  f108		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f108					      REPEND
-     80  f10a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f10a					      REPEND
-     80  f10c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f10c					      REPEND
-     80  f10e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f10e					      REPEND
-     80  f110		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f110					      REPEND
-     80  f112		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f112					      REPEND
-     80  f114		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f114					      REPEND
-     80  f116		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f116					      REPEND
-     80  f118		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f118					      REPEND
-     80  f11a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f11a					      REPEND
-     80  f11c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f11c					      REPEND
-     80  f11e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f11e					      REPEND
-     80  f120		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f120					      REPEND
-     80  f122		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f122					      REPEND
-     80  f124		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f124					      REPEND
-     80  f126		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f126					      REPEND
-     80  f128		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f128					      REPEND
-     80  f12a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f12a					      REPEND
-     80  f12c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f12c					      REPEND
-     80  f12e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f12e					      REPEND
-     80  f130		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f130					      REPEND
-     80  f132		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f132					      REPEND
-     80  f134		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f134					      REPEND
-     80  f136		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f136					      REPEND
-     80  f138		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f138					      REPEND
-     80  f13a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f13a					      REPEND
-     80  f13c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f13c					      REPEND
-     80  f13e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f13e					      REPEND
-     80  f140		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f140					      REPEND
-     80  f142		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f142					      REPEND
-     80  f144		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f144					      REPEND
-     80  f146		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f146					      REPEND
-     80  f148		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f148					      REPEND
-     80  f14a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f14a					      REPEND
-     80  f14c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f14c					      REPEND
-     80  f14e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f14e					      REPEND
-     80  f150		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f150					      REPEND
-     80  f152		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f152					      REPEND
-     80  f154		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f154					      REPEND
-     80  f156		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f156					      REPEND
-     80  f158		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f158					      REPEND
-     80  f15a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f15a					      REPEND
-     80  f15c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f15c					      REPEND
-     80  f15e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f15e					      REPEND
-     80  f160		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f160					      REPEND
-     80  f162		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f162					      REPEND
-     80  f164		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f164					      REPEND
-     80  f166		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f166					      REPEND
-     80  f168		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f168					      REPEND
-     80  f16a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f16a					      REPEND
-     80  f16c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f16c					      REPEND
-     80  f16e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f16e					      REPEND
-     80  f170		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f170					      REPEND
-     80  f172		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f172					      REPEND
-     80  f174		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f174					      REPEND
-     80  f176		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f176					      REPEND
-     80  f178		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f178					      REPEND
-     80  f17a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f17a					      REPEND
-     80  f17c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f17c					      REPEND
-     80  f17e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f17e					      REPEND
-     80  f180		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f180					      REPEND
-     80  f182		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f182					      REPEND
-     80  f184		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f184					      REPEND
-     80  f186		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f186					      REPEND
-     80  f188		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f188					      REPEND
-     80  f18a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f18a					      REPEND
-     80  f18c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f18c					      REPEND
-     80  f18e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f18e					      REPEND
-     80  f190		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f190					      REPEND
-     80  f192		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f192					      REPEND
-     80  f194		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f194					      REPEND
-     80  f196		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f196					      REPEND
-     80  f198		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f198					      REPEND
-     80  f19a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f19a					      REPEND
-     80  f19c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f19c					      REPEND
-     80  f19e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f19e					      REPEND
-     80  f1a0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1a0					      REPEND
-     80  f1a2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1a2					      REPEND
-     80  f1a4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1a4					      REPEND
-     80  f1a6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1a6					      REPEND
-     80  f1a8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1a8					      REPEND
-     80  f1aa		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1aa					      REPEND
-     80  f1ac		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1ac					      REPEND
-     80  f1ae		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1ae					      REPEND
-     80  f1b0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1b0					      REPEND
-     80  f1b2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1b2					      REPEND
-     80  f1b4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1b4					      REPEND
-     80  f1b6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1b6					      REPEND
-     80  f1b8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     79  f1b8					      REPEND
-     80  f1ba		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
-     81  f1bc					      REPEND
-     82  f1bc
-     83  f1bc		       a0 11		      ldy	#17	; counter to draw 17 rows of player0 bitmap
-     84  f1be				   DrawBitmap
-     85  f1be		       b9 7a f2 	      lda	P0Bitmap,Y	; load player bitmap slice of data
-     86  f1c1		       85 1b		      sta	GRP0	; set graphics for player 0 slice
-     87  f1c3
-     88  f1c3		       b9 8b f2 	      lda	P0Color,Y	; load player color from lookup table
-     89  f1c6		       85 06		      sta	COLUP0	; set color for player 0 slice
-     90  f1c8
-     91  f1c8		       85 02		      sta	WSYNC	; wait for next scanline
-     92  f1ca
-     93  f1ca		       88		      dey
-     94  f1cb		       d0 f1		      bne	DrawBitmap	; repeat next scanline until finished
-     95  f1cd
-     96  f1cd		       a9 00		      lda	#0
-     97  f1cf		       85 1b		      sta	GRP0	; disable P0 bitmap graphics
-     98  f1d1
-     99  f1d1		       a9 ff		      lda	#$FF	; enable grass playfield
-    100  f1d3		       85 0d		      sta	PF0
-    101  f1d5		       85 0e		      sta	PF1
-    102  f1d7		       85 0f		      sta	PF2
-    103  f1d9
-    104  f1d9					      REPEAT	15
-    105  f1d9		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1d9					      REPEND
-    105  f1db		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1db					      REPEND
-    105  f1dd		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1dd					      REPEND
-    105  f1df		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1df					      REPEND
-    105  f1e1		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1e1					      REPEND
-    105  f1e3		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1e3					      REPEND
-    105  f1e5		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1e5					      REPEND
-    105  f1e7		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1e7					      REPEND
-    105  f1e9		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1e9					      REPEND
-    105  f1eb		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1eb					      REPEND
-    105  f1ed		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1ed					      REPEND
-    105  f1ef		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1ef					      REPEND
-    105  f1f1		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1f1					      REPEND
-    105  f1f3		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    104  f1f3					      REPEND
-    105  f1f5		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
-    106  f1f7					      REPEND
-    107  f1f7
-    108  f1f7		       a9 00		      lda	#0	; disable grass playfield
-    109  f1f9		       85 0d		      sta	PF0
-    110  f1fb		       85 0e		      sta	PF1
-    111  f1fd		       85 0f		      sta	PF2
-    112  f1ff
-    113  f1ff							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    114  f1ff							;; Output 30 more VBLANK overscan lines to complete our frame
-    115  f1ff							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    116  f1ff				   Overscan
-    117  f1ff		       a9 02		      lda	#2
-    118  f201		       85 01		      sta	VBLANK	; turn VBLANK on again for overscan
-    119  f203					      REPEAT	30
-    120  f203		       85 02		      sta	WSYNC
-    119  f203					      REPEND
-    120  f205		       85 02		      sta	WSYNC
-    119  f205					      REPEND
-    120  f207		       85 02		      sta	WSYNC
-    119  f207					      REPEND
-    120  f209		       85 02		      sta	WSYNC
-    119  f209					      REPEND
-    120  f20b		       85 02		      sta	WSYNC
-    119  f20b					      REPEND
-    120  f20d		       85 02		      sta	WSYNC
-    119  f20d					      REPEND
-    120  f20f		       85 02		      sta	WSYNC
-    119  f20f					      REPEND
-    120  f211		       85 02		      sta	WSYNC
-    119  f211					      REPEND
-    120  f213		       85 02		      sta	WSYNC
-    119  f213					      REPEND
-    120  f215		       85 02		      sta	WSYNC
-    119  f215					      REPEND
-    120  f217		       85 02		      sta	WSYNC
-    119  f217					      REPEND
-    120  f219		       85 02		      sta	WSYNC
-    119  f219					      REPEND
-    120  f21b		       85 02		      sta	WSYNC
-    119  f21b					      REPEND
-    120  f21d		       85 02		      sta	WSYNC
-    119  f21d					      REPEND
-    120  f21f		       85 02		      sta	WSYNC
-    119  f21f					      REPEND
-    120  f221		       85 02		      sta	WSYNC
-    119  f221					      REPEND
-    120  f223		       85 02		      sta	WSYNC
-    119  f223					      REPEND
-    120  f225		       85 02		      sta	WSYNC
-    119  f225					      REPEND
-    120  f227		       85 02		      sta	WSYNC
-    119  f227					      REPEND
-    120  f229		       85 02		      sta	WSYNC
-    119  f229					      REPEND
-    120  f22b		       85 02		      sta	WSYNC
-    119  f22b					      REPEND
-    120  f22d		       85 02		      sta	WSYNC
-    119  f22d					      REPEND
-    120  f22f		       85 02		      sta	WSYNC
-    119  f22f					      REPEND
-    120  f231		       85 02		      sta	WSYNC
-    119  f231					      REPEND
-    120  f233		       85 02		      sta	WSYNC
-    119  f233					      REPEND
-    120  f235		       85 02		      sta	WSYNC
-    119  f235					      REPEND
-    120  f237		       85 02		      sta	WSYNC
-    119  f237					      REPEND
-    120  f239		       85 02		      sta	WSYNC
-    119  f239					      REPEND
-    120  f23b		       85 02		      sta	WSYNC
-    119  f23b					      REPEND
-    120  f23d		       85 02		      sta	WSYNC
-    121  f23f					      REPEND
-    122  f23f
-    123  f23f							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    124  f23f							;; Joystick input test for P0 up/down/left/right
-    125  f23f							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    126  f23f				   CheckP0Up
-    127  f23f		       a9 10		      lda	#%00010000
-    128  f241		       2c 80 02 	      bit	SWCHA
-    129  f244		       d0 02		      bne	CheckP0Down
-    130  f246		       e6 80		      inc	P0XPos
-    131  f248
-    132  f248				   CheckP0Down
-    133  f248		       a9 20		      lda	#%00100000
-    134  f24a		       2c 80 02 	      bit	SWCHA
-    135  f24d		       d0 02		      bne	CheckP0Left
-    136  f24f		       c6 80		      dec	P0XPos
-    137  f251
-    138  f251				   CheckP0Left
-    139  f251		       a9 40		      lda	#%01000000
-    140  f253		       2c 80 02 	      bit	SWCHA
-    141  f256		       d0 02		      bne	CheckP0Right
-    142  f258		       c6 80		      dec	P0XPos
-    143  f25a
-    144  f25a				   CheckP0Right
-    145  f25a		       a9 80		      lda	#%10000000
-    146  f25c		       2c 80 02 	      bit	SWCHA
-    147  f25f		       d0 02		      bne	NoInput
-    148  f261		       e6 80		      inc	P0XPos
-    149  f263
-    150  f263				   NoInput
-    151  f263							; fallback when no input was performed
+     54  f022							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     55  f022							;; Start a new frame by configuring VBLANK and VSYNC
+     56  f022							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     57  f022		       a9 02		      lda	#2
+     58  f024		       85 01		      sta	VBLANK	; turn VBLANK on
+     59  f026		       85 00		      sta	VSYNC	; turn VSYNC on
+     60  f028
+     61  f028							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     62  f028							;; Display 3 vertical lines of VSYNC
+     63  f028							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     64  f028					      REPEAT	3
+     65  f028		       85 02		      sta	WSYNC	; first three VSYNC scanlines
+     64  f028					      REPEND
+     65  f02a		       85 02		      sta	WSYNC	; first three VSYNC scanlines
+     64  f02a					      REPEND
+     65  f02c		       85 02		      sta	WSYNC	; first three VSYNC scanlines
+     66  f02e					      REPEND
+     67  f02e		       a9 00		      lda	#0
+     68  f030		       85 00		      sta	VSYNC	; turn VSYNC off
+     69  f032
+     70  f032							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     71  f032							;; Let the TIA output the remaining 35 lines of VBLANK (37 - 2)
+     72  f032							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     73  f032					      REPEAT	35
+     74  f032		       85 02		      sta	WSYNC
+     73  f032					      REPEND
+     74  f034		       85 02		      sta	WSYNC
+     73  f034					      REPEND
+     74  f036		       85 02		      sta	WSYNC
+     73  f036					      REPEND
+     74  f038		       85 02		      sta	WSYNC
+     73  f038					      REPEND
+     74  f03a		       85 02		      sta	WSYNC
+     73  f03a					      REPEND
+     74  f03c		       85 02		      sta	WSYNC
+     73  f03c					      REPEND
+     74  f03e		       85 02		      sta	WSYNC
+     73  f03e					      REPEND
+     74  f040		       85 02		      sta	WSYNC
+     73  f040					      REPEND
+     74  f042		       85 02		      sta	WSYNC
+     73  f042					      REPEND
+     74  f044		       85 02		      sta	WSYNC
+     73  f044					      REPEND
+     74  f046		       85 02		      sta	WSYNC
+     73  f046					      REPEND
+     74  f048		       85 02		      sta	WSYNC
+     73  f048					      REPEND
+     74  f04a		       85 02		      sta	WSYNC
+     73  f04a					      REPEND
+     74  f04c		       85 02		      sta	WSYNC
+     73  f04c					      REPEND
+     74  f04e		       85 02		      sta	WSYNC
+     73  f04e					      REPEND
+     74  f050		       85 02		      sta	WSYNC
+     73  f050					      REPEND
+     74  f052		       85 02		      sta	WSYNC
+     73  f052					      REPEND
+     74  f054		       85 02		      sta	WSYNC
+     73  f054					      REPEND
+     74  f056		       85 02		      sta	WSYNC
+     73  f056					      REPEND
+     74  f058		       85 02		      sta	WSYNC
+     73  f058					      REPEND
+     74  f05a		       85 02		      sta	WSYNC
+     73  f05a					      REPEND
+     74  f05c		       85 02		      sta	WSYNC
+     73  f05c					      REPEND
+     74  f05e		       85 02		      sta	WSYNC
+     73  f05e					      REPEND
+     74  f060		       85 02		      sta	WSYNC
+     73  f060					      REPEND
+     74  f062		       85 02		      sta	WSYNC
+     73  f062					      REPEND
+     74  f064		       85 02		      sta	WSYNC
+     73  f064					      REPEND
+     74  f066		       85 02		      sta	WSYNC
+     73  f066					      REPEND
+     74  f068		       85 02		      sta	WSYNC
+     73  f068					      REPEND
+     74  f06a		       85 02		      sta	WSYNC
+     73  f06a					      REPEND
+     74  f06c		       85 02		      sta	WSYNC
+     73  f06c					      REPEND
+     74  f06e		       85 02		      sta	WSYNC
+     73  f06e					      REPEND
+     74  f070		       85 02		      sta	WSYNC
+     73  f070					      REPEND
+     74  f072		       85 02		      sta	WSYNC
+     73  f072					      REPEND
+     74  f074		       85 02		      sta	WSYNC
+     73  f074					      REPEND
+     74  f076		       85 02		      sta	WSYNC
+     75  f078					      REPEND
+     76  f078		       a9 00		      lda	#0
+     77  f07a		       85 01		      sta	VBLANK	; turn VBLANK off
+     78  f07c
+     79  f07c							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     80  f07c							;; Draw the 192 visible scanlines
+     81  f07c							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+     82  f07c					      REPEAT	160
+     83  f07c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f07c					      REPEND
+     83  f07e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f07e					      REPEND
+     83  f080		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f080					      REPEND
+     83  f082		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f082					      REPEND
+     83  f084		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f084					      REPEND
+     83  f086		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f086					      REPEND
+     83  f088		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f088					      REPEND
+     83  f08a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f08a					      REPEND
+     83  f08c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f08c					      REPEND
+     83  f08e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f08e					      REPEND
+     83  f090		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f090					      REPEND
+     83  f092		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f092					      REPEND
+     83  f094		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f094					      REPEND
+     83  f096		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f096					      REPEND
+     83  f098		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f098					      REPEND
+     83  f09a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f09a					      REPEND
+     83  f09c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f09c					      REPEND
+     83  f09e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f09e					      REPEND
+     83  f0a0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0a0					      REPEND
+     83  f0a2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0a2					      REPEND
+     83  f0a4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0a4					      REPEND
+     83  f0a6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0a6					      REPEND
+     83  f0a8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0a8					      REPEND
+     83  f0aa		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0aa					      REPEND
+     83  f0ac		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0ac					      REPEND
+     83  f0ae		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0ae					      REPEND
+     83  f0b0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0b0					      REPEND
+     83  f0b2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0b2					      REPEND
+     83  f0b4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0b4					      REPEND
+     83  f0b6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0b6					      REPEND
+     83  f0b8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0b8					      REPEND
+     83  f0ba		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0ba					      REPEND
+     83  f0bc		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0bc					      REPEND
+     83  f0be		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0be					      REPEND
+     83  f0c0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0c0					      REPEND
+     83  f0c2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0c2					      REPEND
+     83  f0c4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0c4					      REPEND
+     83  f0c6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0c6					      REPEND
+     83  f0c8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0c8					      REPEND
+     83  f0ca		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0ca					      REPEND
+     83  f0cc		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0cc					      REPEND
+     83  f0ce		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0ce					      REPEND
+     83  f0d0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0d0					      REPEND
+     83  f0d2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0d2					      REPEND
+     83  f0d4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0d4					      REPEND
+     83  f0d6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0d6					      REPEND
+     83  f0d8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0d8					      REPEND
+     83  f0da		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0da					      REPEND
+     83  f0dc		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0dc					      REPEND
+     83  f0de		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0de					      REPEND
+     83  f0e0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0e0					      REPEND
+     83  f0e2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0e2					      REPEND
+     83  f0e4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0e4					      REPEND
+     83  f0e6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0e6					      REPEND
+     83  f0e8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0e8					      REPEND
+     83  f0ea		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0ea					      REPEND
+     83  f0ec		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0ec					      REPEND
+     83  f0ee		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0ee					      REPEND
+     83  f0f0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0f0					      REPEND
+     83  f0f2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0f2					      REPEND
+     83  f0f4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0f4					      REPEND
+     83  f0f6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0f6					      REPEND
+     83  f0f8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0f8					      REPEND
+     83  f0fa		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0fa					      REPEND
+     83  f0fc		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0fc					      REPEND
+     83  f0fe		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f0fe					      REPEND
+     83  f100		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f100					      REPEND
+     83  f102		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f102					      REPEND
+     83  f104		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f104					      REPEND
+     83  f106		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f106					      REPEND
+     83  f108		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f108					      REPEND
+     83  f10a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f10a					      REPEND
+     83  f10c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f10c					      REPEND
+     83  f10e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f10e					      REPEND
+     83  f110		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f110					      REPEND
+     83  f112		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f112					      REPEND
+     83  f114		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f114					      REPEND
+     83  f116		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f116					      REPEND
+     83  f118		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f118					      REPEND
+     83  f11a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f11a					      REPEND
+     83  f11c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f11c					      REPEND
+     83  f11e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f11e					      REPEND
+     83  f120		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f120					      REPEND
+     83  f122		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f122					      REPEND
+     83  f124		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f124					      REPEND
+     83  f126		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f126					      REPEND
+     83  f128		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f128					      REPEND
+     83  f12a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f12a					      REPEND
+     83  f12c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f12c					      REPEND
+     83  f12e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f12e					      REPEND
+     83  f130		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f130					      REPEND
+     83  f132		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f132					      REPEND
+     83  f134		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f134					      REPEND
+     83  f136		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f136					      REPEND
+     83  f138		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f138					      REPEND
+     83  f13a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f13a					      REPEND
+     83  f13c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f13c					      REPEND
+     83  f13e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f13e					      REPEND
+     83  f140		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f140					      REPEND
+     83  f142		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f142					      REPEND
+     83  f144		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f144					      REPEND
+     83  f146		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f146					      REPEND
+     83  f148		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f148					      REPEND
+     83  f14a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f14a					      REPEND
+     83  f14c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f14c					      REPEND
+     83  f14e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f14e					      REPEND
+     83  f150		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f150					      REPEND
+     83  f152		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f152					      REPEND
+     83  f154		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f154					      REPEND
+     83  f156		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f156					      REPEND
+     83  f158		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f158					      REPEND
+     83  f15a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f15a					      REPEND
+     83  f15c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f15c					      REPEND
+     83  f15e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f15e					      REPEND
+     83  f160		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f160					      REPEND
+     83  f162		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f162					      REPEND
+     83  f164		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f164					      REPEND
+     83  f166		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f166					      REPEND
+     83  f168		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f168					      REPEND
+     83  f16a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f16a					      REPEND
+     83  f16c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f16c					      REPEND
+     83  f16e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f16e					      REPEND
+     83  f170		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f170					      REPEND
+     83  f172		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f172					      REPEND
+     83  f174		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f174					      REPEND
+     83  f176		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f176					      REPEND
+     83  f178		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f178					      REPEND
+     83  f17a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f17a					      REPEND
+     83  f17c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f17c					      REPEND
+     83  f17e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f17e					      REPEND
+     83  f180		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f180					      REPEND
+     83  f182		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f182					      REPEND
+     83  f184		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f184					      REPEND
+     83  f186		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f186					      REPEND
+     83  f188		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f188					      REPEND
+     83  f18a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f18a					      REPEND
+     83  f18c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f18c					      REPEND
+     83  f18e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f18e					      REPEND
+     83  f190		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f190					      REPEND
+     83  f192		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f192					      REPEND
+     83  f194		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f194					      REPEND
+     83  f196		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f196					      REPEND
+     83  f198		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f198					      REPEND
+     83  f19a		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f19a					      REPEND
+     83  f19c		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f19c					      REPEND
+     83  f19e		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f19e					      REPEND
+     83  f1a0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1a0					      REPEND
+     83  f1a2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1a2					      REPEND
+     83  f1a4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1a4					      REPEND
+     83  f1a6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1a6					      REPEND
+     83  f1a8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1a8					      REPEND
+     83  f1aa		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1aa					      REPEND
+     83  f1ac		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1ac					      REPEND
+     83  f1ae		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1ae					      REPEND
+     83  f1b0		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1b0					      REPEND
+     83  f1b2		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1b2					      REPEND
+     83  f1b4		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1b4					      REPEND
+     83  f1b6		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1b6					      REPEND
+     83  f1b8		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     82  f1b8					      REPEND
+     83  f1ba		       85 02		      sta	WSYNC	; wait for 160 empty scanlines
+     84  f1bc					      REPEND
+     85  f1bc
+     86  f1bc		       a0 11		      ldy	#17	; counter to draw 17 rows of player0 bitmap
+     87  f1be				   DrawBitmap
+     88  f1be		       b9 7a f2 	      lda	P0Bitmap,Y	; load player bitmap slice of data
+     89  f1c1		       85 1b		      sta	GRP0	; set graphics for player 0 slice
+     90  f1c3
+     91  f1c3		       b9 8b f2 	      lda	P0Color,Y	; load player color from lookup table
+     92  f1c6		       85 06		      sta	COLUP0	; set color for player 0 slice
+     93  f1c8
+     94  f1c8		       85 02		      sta	WSYNC	; wait for next scanline
+     95  f1ca
+     96  f1ca		       88		      dey
+     97  f1cb		       d0 f1		      bne	DrawBitmap	; repeat next scanline until finished
+     98  f1cd
+     99  f1cd		       a9 00		      lda	#0
+    100  f1cf		       85 1b		      sta	GRP0	; disable P0 bitmap graphics
+    101  f1d1
+    102  f1d1		       a9 ff		      lda	#$FF	; enable grass playfield
+    103  f1d3		       85 0d		      sta	PF0
+    104  f1d5		       85 0e		      sta	PF1
+    105  f1d7		       85 0f		      sta	PF2
+    106  f1d9
+    107  f1d9					      REPEAT	15
+    108  f1d9		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1d9					      REPEND
+    108  f1db		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1db					      REPEND
+    108  f1dd		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1dd					      REPEND
+    108  f1df		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1df					      REPEND
+    108  f1e1		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1e1					      REPEND
+    108  f1e3		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1e3					      REPEND
+    108  f1e5		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1e5					      REPEND
+    108  f1e7		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1e7					      REPEND
+    108  f1e9		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1e9					      REPEND
+    108  f1eb		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1eb					      REPEND
+    108  f1ed		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1ed					      REPEND
+    108  f1ef		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1ef					      REPEND
+    108  f1f1		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1f1					      REPEND
+    108  f1f3		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    107  f1f3					      REPEND
+    108  f1f5		       85 02		      sta	WSYNC	; wait for remaining 15 empty scanlines
+    109  f1f7					      REPEND
+    110  f1f7
+    111  f1f7		       a9 00		      lda	#0	; disable grass playfield
+    112  f1f9		       85 0d		      sta	PF0
+    113  f1fb		       85 0e		      sta	PF1
+    114  f1fd		       85 0f		      sta	PF2
+    115  f1ff
+    116  f1ff							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    117  f1ff							;; Output 30 more VBLANK overscan lines to complete our frame
+    118  f1ff							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    119  f1ff				   Overscan
+    120  f1ff		       a9 02		      lda	#2
+    121  f201		       85 01		      sta	VBLANK	; turn VBLANK on again for overscan
+    122  f203					      REPEAT	30
+    123  f203		       85 02		      sta	WSYNC
+    122  f203					      REPEND
+    123  f205		       85 02		      sta	WSYNC
+    122  f205					      REPEND
+    123  f207		       85 02		      sta	WSYNC
+    122  f207					      REPEND
+    123  f209		       85 02		      sta	WSYNC
+    122  f209					      REPEND
+    123  f20b		       85 02		      sta	WSYNC
+    122  f20b					      REPEND
+    123  f20d		       85 02		      sta	WSYNC
+    122  f20d					      REPEND
+    123  f20f		       85 02		      sta	WSYNC
+    122  f20f					      REPEND
+    123  f211		       85 02		      sta	WSYNC
+    122  f211					      REPEND
+    123  f213		       85 02		      sta	WSYNC
+    122  f213					      REPEND
+    123  f215		       85 02		      sta	WSYNC
+    122  f215					      REPEND
+    123  f217		       85 02		      sta	WSYNC
+    122  f217					      REPEND
+    123  f219		       85 02		      sta	WSYNC
+    122  f219					      REPEND
+    123  f21b		       85 02		      sta	WSYNC
+    122  f21b					      REPEND
+    123  f21d		       85 02		      sta	WSYNC
+    122  f21d					      REPEND
+    123  f21f		       85 02		      sta	WSYNC
+    122  f21f					      REPEND
+    123  f221		       85 02		      sta	WSYNC
+    122  f221					      REPEND
+    123  f223		       85 02		      sta	WSYNC
+    122  f223					      REPEND
+    123  f225		       85 02		      sta	WSYNC
+    122  f225					      REPEND
+    123  f227		       85 02		      sta	WSYNC
+    122  f227					      REPEND
+    123  f229		       85 02		      sta	WSYNC
+    122  f229					      REPEND
+    123  f22b		       85 02		      sta	WSYNC
+    122  f22b					      REPEND
+    123  f22d		       85 02		      sta	WSYNC
+    122  f22d					      REPEND
+    123  f22f		       85 02		      sta	WSYNC
+    122  f22f					      REPEND
+    123  f231		       85 02		      sta	WSYNC
+    122  f231					      REPEND
+    123  f233		       85 02		      sta	WSYNC
+    122  f233					      REPEND
+    123  f235		       85 02		      sta	WSYNC
+    122  f235					      REPEND
+    123  f237		       85 02		      sta	WSYNC
+    122  f237					      REPEND
+    123  f239		       85 02		      sta	WSYNC
+    122  f239					      REPEND
+    123  f23b		       85 02		      sta	WSYNC
+    122  f23b					      REPEND
+    123  f23d		       85 02		      sta	WSYNC
+    124  f23f					      REPEND
+    125  f23f
+    126  f23f							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    127  f23f							;; Joystick input test for P0 up/down/left/right
+    128  f23f							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    129  f23f				   CheckP0Up
+    130  f23f		       a9 10		      lda	#%00010000
+    131  f241		       2c 80 02 	      bit	SWCHA
+    132  f244		       d0 02		      bne	CheckP0Down
+    133  f246		       e6 80		      inc	P0XPos
+    134  f248
+    135  f248				   CheckP0Down
+    136  f248		       a9 20		      lda	#%00100000
+    137  f24a		       2c 80 02 	      bit	SWCHA
+    138  f24d		       d0 02		      bne	CheckP0Left
+    139  f24f		       c6 80		      dec	P0XPos
+    140  f251
+    141  f251				   CheckP0Left
+    142  f251		       a9 40		      lda	#%01000000
+    143  f253		       2c 80 02 	      bit	SWCHA
+    144  f256		       d0 02		      bne	CheckP0Right
+    145  f258		       c6 80		      dec	P0XPos
+    146  f25a
+    147  f25a				   CheckP0Right
+    148  f25a		       a9 80		      lda	#%10000000
+    149  f25c		       2c 80 02 	      bit	SWCHA
+    150  f25f		       d0 02		      bne	NoInput
+    151  f261		       e6 80		      inc	P0XPos
     152  f263
-    153  f263							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    154  f263							;; Loop to next frame
-    155  f263							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    156  f263		       4c 17 f0 	      jmp	StartFrame
-    157  f266
-    158  f266							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    159  f266							;; Creates a subroutine to set the X position of objects with fine offset
-    160  f266							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    161  f266							;; A register contains the desired X-coordinate
-    162  f266							;; Y=0 : Player0
-    163  f266							;; Y=1 : Player1
-    164  f266							;; Y=2 : Missile0
-    165  f266							;; Y=3 : Missile1
-    166  f266							;; Y=4 : Ball
-    167  f266							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    168  f266				   SetObjectXPos subroutine
-    169  f266		       85 02		      sta	WSYNC	; start a fresh new scanline
-    170  f268		       38		      sec		; make sure carry-flag is set before subtracion
-    171  f269				   .Div15Loop		; local label (only call by subroutine)
-    172  f269		       e9 0f		      sbc	#15	; subtract 15 from accumulator
-    173  f26b		       b0 fc		      bcs	.Div15Loop	; loop until carry-flag is clear
-    174  f26d		       49 07		      eor	#7	; handle offset range from -8 to 7
-    175  f26f		       0a		      asl
-    176  f270		       0a		      asl
-    177  f271		       0a		      asl
-    178  f272		       0a		      asl		; four shift lefts to get only the top 4 bits
-    179  f273		       99 20 00 	      sta	HMP0,Y	; store the fine offset to the correct HMxx
-    180  f276		       99 10 00 	      sta	RESP0,Y	; fix object position in 15-step increment
-    181  f279		       60		      rts
-    182  f27a
-    183  f27a							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    184  f27a							;; Lookup table for the player graphics bitmap
-    185  f27a							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    186  f27a				   P0Bitmap
-    187  f27a		       00		      byte.b	#%00000000
-    188  f27b		       14		      byte.b	#%00010100
-    189  f27c		       14		      byte.b	#%00010100
-    190  f27d		       14		      byte.b	#%00010100
-    191  f27e		       14		      byte.b	#%00010100
-    192  f27f		       14		      byte.b	#%00010100
-    193  f280		       1c		      byte.b	#%00011100
-    194  f281		       5d		      byte.b	#%01011101
-    195  f282		       5d		      byte.b	#%01011101
-    196  f283		       5d		      byte.b	#%01011101
-    197  f284		       5d		      byte.b	#%01011101
-    198  f285		       7f		      byte.b	#%01111111
-    199  f286		       3e		      byte.b	#%00111110
-    200  f287		       10		      byte.b	#%00010000
-    201  f288		       1c		      byte.b	#%00011100
-    202  f289		       1c		      byte.b	#%00011100
-    203  f28a		       1c		      byte.b	#%00011100
-    204  f28b
-    205  f28b							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    206  f28b							;; Lookup table for the player colors
-    207  f28b							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    208  f28b				   P0Color
-    209  f28b		       00		      byte.b	#$00
-    210  f28c		       f6		      byte.b	#$F6
-    211  f28d		       f2		      byte.b	#$F2
-    212  f28e		       f2		      byte.b	#$F2
-    213  f28f		       f2		      byte.b	#$F2
-    214  f290		       f2		      byte.b	#$F2
-    215  f291		       f2		      byte.b	#$F2
-    216  f292		       c2		      byte.b	#$C2
-    217  f293		       c2		      byte.b	#$C2
-    218  f294		       c2		      byte.b	#$C2
-    219  f295		       c2		      byte.b	#$C2
-    220  f296		       c2		      byte.b	#$C2
-    221  f297		       c2		      byte.b	#$C2
-    222  f298		       3e		      byte.b	#$3E
-    223  f299		       3e		      byte.b	#$3E
-    224  f29a		       3e		      byte.b	#$3E
-    225  f29b		       24		      byte.b	#$24
-    226  f29c
-    227  f29c							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    228  f29c							;; Complete ROM size
-    229  f29c							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-    230  fffc					      org	$FFFC
-    231  fffc		       00 f0		      word.w	Reset
-    232  fffe		       00 f0		      word.w	Reset
+    153  f263				   NoInput
+    154  f263							; fallback when no input was performed
+    155  f263
+    156  f263							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    157  f263							;; Loop to next frame
+    158  f263							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    159  f263		       4c 17 f0 	      jmp	StartFrame
+    160  f266
+    161  f266							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    162  f266							;; Creates a subroutine to set the X position of objects with fine offset
+    163  f266							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    164  f266							;; A register contains the desired X-coordinate
+    165  f266							;; Y=0 : Player0
+    166  f266							;; Y=1 : Player1
+    167  f266							;; Y=2 : Missile0
+    168  f266							;; Y=3 : Missile1
+    169  f266							;; Y=4 : Ball
+    170  f266							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    171  f266				   SetObjectXPos subroutine
+    172  f266		       85 02		      sta	WSYNC	; start a fresh new scanline
+    173  f268		       38		      sec		; make sure carry-flag is set before subtracion
+    174  f269				   .Div15Loop		; local label (only call by subroutine)
+    175  f269		       e9 0f		      sbc	#15	; subtract 15 from accumulator
+    176  f26b		       b0 fc		      bcs	.Div15Loop	; loop until carry-flag is clear
+    177  f26d		       49 07		      eor	#7	; handle offset range from -8 to 7
+    178  f26f		       0a		      asl
+    179  f270		       0a		      asl
+    180  f271		       0a		      asl
+    181  f272		       0a		      asl		; four shift lefts to get only the top 4 bits
+    182  f273		       99 20 00 	      sta	HMP0,Y	; store the fine offset to the correct HMxx
+    183  f276		       99 10 00 	      sta	RESP0,Y	; fix object position in 15-step increment
+    184  f279		       60		      rts
+    185  f27a
+    186  f27a							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    187  f27a							;; Lookup table for the player graphics bitmap
+    188  f27a							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    189  f27a				   P0Bitmap
+    190  f27a		       00		      byte.b	#%00000000
+    191  f27b		       14		      byte.b	#%00010100
+    192  f27c		       14		      byte.b	#%00010100
+    193  f27d		       14		      byte.b	#%00010100
+    194  f27e		       14		      byte.b	#%00010100
+    195  f27f		       14		      byte.b	#%00010100
+    196  f280		       1c		      byte.b	#%00011100
+    197  f281		       5d		      byte.b	#%01011101
+    198  f282		       5d		      byte.b	#%01011101
+    199  f283		       5d		      byte.b	#%01011101
+    200  f284		       5d		      byte.b	#%01011101
+    201  f285		       7f		      byte.b	#%01111111
+    202  f286		       3e		      byte.b	#%00111110
+    203  f287		       10		      byte.b	#%00010000
+    204  f288		       1c		      byte.b	#%00011100
+    205  f289		       1c		      byte.b	#%00011100
+    206  f28a		       1c		      byte.b	#%00011100
+    207  f28b
+    208  f28b							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    209  f28b							;; Lookup table for the player colors
+    210  f28b							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    211  f28b				   P0Color
+    212  f28b		       00		      byte.b	#$00
+    213  f28c		       f6		      byte.b	#$F6
+    214  f28d		       f2		      byte.b	#$F2
+    215  f28e		       f2		      byte.b	#$F2
+    216  f28f		       f2		      byte.b	#$F2
+    217  f290		       f2		      byte.b	#$F2
+    218  f291		       f2		      byte.b	#$F2
+    219  f292		       c2		      byte.b	#$C2
+    220  f293		       c2		      byte.b	#$C2
+    221  f294		       c2		      byte.b	#$C2
+    222  f295		       c2		      byte.b	#$C2
+    223  f296		       c2		      byte.b	#$C2
+    224  f297		       c2		      byte.b	#$C2
+    225  f298		       3e		      byte.b	#$3E
+    226  f299		       3e		      byte.b	#$3E
+    227  f29a		       3e		      byte.b	#$3E
+    228  f29b		       24		      byte.b	#$24
+    229  f29c
+    230  f29c							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    231  f29c							;; Complete ROM size
+    232  f29c							;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    233  fffc					      org	$FFFC
+    234  fffc		       00 f0		      word.w	Reset
+    235  fffe		       00 f0		      word.w	Reset

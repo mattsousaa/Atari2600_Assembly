@@ -135,8 +135,8 @@ GameVisibleLine:
     bcc .DrawSpriteP0        ; if result < SpriteHeight, call subroutine
     lda #0                   ; else, set lookup index to 0
 .DrawSpriteP0:
-    ;clc                     ; clears carry flag before addition
-    ;adc JetAnimOffset       ; jumps to correct sprite frame in memory
+    clc                      ; clears carry flag before addition
+    adc JetAnimOffset        ; jumps to correct sprite frame in memory
     tay                      ; load Y so we can work with pointer
     lda (JetSpritePtr),Y     ; load player bitmap slice of data
     sta WSYNC                ; wait for next scanline
@@ -164,6 +164,11 @@ GameVisibleLine:
     dex                      ; X--
     bne .GameLineLoop        ; repeat next main game scanline until finished
 
+    lda #0
+    sta JetAnimOffset        ; reset jet animation frame to zero each frame
+
+    sta WSYNC                ; wait for final scanline
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Display Overscan
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -174,6 +179,43 @@ GameVisibleLine:
     REPEND
     lda #0
     sta VBLANK               ; turn off VBLANK
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Process joystick input for player0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CheckP0Up:
+    lda #%00010000           ; player0 joystick up
+    bit SWCHA
+    bne CheckP0Down          ; if bit pattern doesnt match, bypass Up block
+    inc JetYPos
+    lda #0
+    sta JetAnimOffset        ; reset sprite animation to first frame
+
+CheckP0Down:
+    lda #%00100000           ; player0 joystick down
+    bit SWCHA
+    bne CheckP0Left          ; if bit pattern doesnt match, bypass Down block
+    dec JetYPos
+    lda #0
+    sta JetAnimOffset        ; reset sprite animation to first frame
+
+CheckP0Left:
+    lda #%01000000           ; player0 joystick left
+    bit SWCHA
+    bne CheckP0Right         ; if bit pattern doesnt match, bypass Left block
+    dec JetXPos
+    lda JET_HEIGHT           ; 9
+    sta JetAnimOffset        ; set animation offset to the second frame
+
+CheckP0Right:
+    lda #%10000000           ; player0 joystick right
+    bit SWCHA
+    bne EndInputCheck        ; if bit pattern doesnt match, bypass Right block
+    inc JetXPos
+    lda JET_HEIGHT           ; 9
+    sta JetAnimOffset        ; set animation offset to the second frame
+
+EndInputCheck:               ; fallback when no input was performed
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loop back to start a brand new frame
@@ -188,8 +230,8 @@ GameVisibleLine:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 SetObjectXPos subroutine
     sta WSYNC                ; start a fresh new scanline
-    sec                      ; make sure carry-flag is set before subtracion
-.Div15Loop
+    sec                      ; make sure carry-flag is set before subtraction
+.Div15Loop                 
     sbc #15                  ; subtract 15 from accumulator
     bcs .Div15Loop           ; loop until carry-flag is clear
     eor #7                   ; handle offset range from -8 to 7
@@ -199,7 +241,7 @@ SetObjectXPos subroutine
     asl                      ; four shift lefts to get only the top 4 bits
     sta HMP0,Y               ; store the fine offset to the correct HMxx
     sta RESP0,Y              ; fix object position in 15-step increment
-    rts
+    rts                      ; return to the memory address that called the subroutine
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Declare ROM lookup tables
