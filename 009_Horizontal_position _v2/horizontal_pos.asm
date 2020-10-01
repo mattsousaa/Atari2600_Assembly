@@ -105,10 +105,10 @@ DrawBitmap:
     bne DrawBitmap  ; repeat next scanline until finished
 
     lda #0
-    sta GRP0       ; disable P0 bitmap graphics
+    sta GRP0        ; disable P0 bitmap graphics
 
     REPEAT 124
-        sta WSYNC  ; wait for remaining 124 empty scanlines
+        sta WSYNC   ; wait for remaining 124 empty scanlines
     REPEND
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
