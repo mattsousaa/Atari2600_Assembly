@@ -112,8 +112,22 @@ StartFrame:
     sta VBLANK               ; turn off VBLANK
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Display the 96 visible scanlines of our main game <because 2-line kernel>
+;; Display the scoreboard lines
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    lda #0                   ; clear TIA registers before each new frame
+    sta PF0
+    sta PF1
+    sta PF2
+    sta GRP0
+    sta GRP1
+    sta COLUPF
+    REPEAT 20
+        sta WSYNC            ; display 20 scanlines where the scoreboard goes
+    REPEND
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Display the remaining visible scanlines ((192-20)/2 = 86) of our main game (2-line kernel)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 GameVisibleLine:
     lda #$84
     sta COLUBK               ; set background/river color to blue
@@ -128,7 +142,7 @@ GameVisibleLine:
     lda #0
     sta PF2                  ; setting PF2 bit pattern
 
-    ldx #96                  ; X counts the number of remaining scanlines
+    ldx #84                  ; X counts the number of remaining scanlines
 .GameLineLoop:               ; inside GameVisibleLine label
 .AreWeInsideJetSprite:       ; check if should render sprite player0
     txa                      ; transfer X to A
@@ -236,6 +250,28 @@ UpdateBomberPosition:
 EndPositionUpdate:           ; fallback for the position update code
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Check for object collision
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+CheckCollisionP0P1:
+    lda #%10000000           ; CXPPMM bit 7 detects P0 and P1 collision
+    bit CXPPMM               ; check CXPPMM bit 7 with the above pattern
+    bne .CollisionP0P1       ; if collision between P0 and P1 happened, branch
+    jmp CheckCollisionP0PF   ; else, skip to next check
+.CollisionP0P1:
+    jsr GameOver             ; call GameOver subroutine
+
+CheckCollisionP0PF:
+    lda #%10000000           ; CXP0FB bit 7 detects P0 and PF collision
+    bit CXP0FB               ; check CXP0FB bit 7 with the above pattern
+    bne .CollisionP0PF       ; if collision P0 and PF happened, branch
+    jmp EndCollisionCheck    ; else, skip to next check
+.CollisionP0PF:
+    jsr GameOver             ; call GameOver subroutine
+
+EndCollisionCheck:           ; fallback
+    sta CXCLR                ; clear all collision flags before the next frame
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loop back to start a brand new frame
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     jmp StartFrame           ; continue to display the next frame
@@ -260,6 +296,14 @@ SetObjectXPos subroutine
     sta HMP0,Y               ; store the fine offset to the correct HMxx
     sta RESP0,Y              ; fix object position in 15-step increment
     rts                      ; return to the memory address that called the subroutine
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Game Over subroutine
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+GameOver subroutine
+    lda #$30
+    sta COLUBK
+    rts
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Subroutine to generate a Linear-Feedback Shift Register random number
