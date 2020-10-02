@@ -16,6 +16,8 @@ JetXPos         byte         ; player0 x-position
 JetYPos         byte         ; player0 y-position
 BomberXPos      byte         ; player1 x-position (enemy)
 BomberYPos      byte         ; player1 y-position (enemy)
+MissileXPos     byte         ; missile x-position
+MissileYPos     byte         ; missile y-position
 Score           byte         ; 2-digit score stored as BCD
 Timer           byte         ; 2-digit timer stored as BCD
 Temp            byte         ; auxiliary variable to store temp values
@@ -29,6 +31,8 @@ JetAnimOffset   byte         ; player0 frame offset for sprite animation
 Random          byte         ; used to generate random bomber x-position
 ScoreSprite     byte         ; store the sprite bit pattern for the score
 TimerSprite     byte         ; store the sprite bit pattern for the timer
+TerrainColor    byte         ; store the color of the terrain playfield
+RiverColor      byte         ; store the color of the river playfield
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Define constants
@@ -59,10 +63,24 @@ Reset:
     sta BomberYPos           ; BomberYPos = 83
     lda #%11010100
     sta Random               ; Random = $D4
-    lda #4
+    lda #0
     sta Score                ; Score = 0
-    lda #8
+    lda #0
     sta Timer                ; Timer = 0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Declare a MACRO to check if we should display the missile 0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    MAC DRAW_MISSILE         ; stsrts macro
+        lda #%00000000
+        cpx MissileYPos      ; compare X (current scanline) with missile Y pos
+        bne .SkipMissileDraw ; if (X != missile Y position), then skip draw
+.DrawMissile:                ; else:
+        lda #%00000010       ;     enable missile 0 display
+        inc MissileYPos      ;     MissileYPos++
+.SkipMissileDraw:
+        sta ENAM0            ; store correct value in the TIA missile register
+    ENDM                     ; end macro
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initialize pointers to the correct lookup table addresses (little endian arquitecture)
@@ -118,6 +136,10 @@ StartFrame:
     ldy #1
     jsr SetObjectXPos        ; set player1 horizontal position <jump subroutine>
 
+    lda MissileXPos
+    ldy #2
+    jsr SetObjectXPos        ; set missile horizontal position <jump subroutine>
+
     jsr CalculateDigitOffset ; calculate scoreboard digits lookup table offset
 
     sta WSYNC
@@ -165,7 +187,7 @@ StartFrame:
     ldy OnesDigitOffset+1    ; get the ones digit offset for the Timer
     lda Digits,Y             ; load digit pattern from the lookup table
     and #$0F                 ; mask/remove the graphics for the tens digit
-    
+    ora TimerSprite          ; merge with the saved tens digit graphics
     sta TimerSprite          ; and save it
 
     jsr Sleep12Cycles        ; wastes some cycles
@@ -197,14 +219,16 @@ StartFrame:
     sta WSYNC
     sta WSYNC                ; three lines of padding
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Display the remaining visible scanlines ((192-20)/2 = 86) of our main game (2-line kernel)
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Display the remaining visible scanlines of our main game (2-line kernel)
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 GameVisibleLine:
-    lda #$84
-    sta COLUBK               ; set background/river color to blue
-    lda #$C2
-    sta COLUPF               ; set playfield/grass color to green
+    lda TerrainColor
+    sta COLUPF               ; set the terrain background color
+
+    lda RiverColor
+    sta COLUBK               ; set the river background color
+
     lda #%00000001
     sta CTRLPF               ; enable playfield reflection
     lda #$F0
@@ -216,6 +240,8 @@ GameVisibleLine:
 
     ldx #85                  ; X counts the number of remaining scanlines
 .GameLineLoop:               ; inside GameVisibleLine label
+    DRAW_MISSILE             ; macro to check if we should draw the missile
+
 .AreWeInsideJetSprite:       ; check if should render sprite player0
     txa                      ; transfer X to A
     sec                      ; make sure carry flag is set
@@ -270,39 +296,69 @@ GameVisibleLine:
     sta VBLANK               ; turn off VBLANK
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Process joystick input for player0
+;; Process joystick input for player 0 up/down/left/right
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 CheckP0Up:
-    lda #%00010000           ; player0 joystick up
+    lda #%00010000           ; if player 0 joystick up
     bit SWCHA
-    bne CheckP0Down          ; if bit pattern doesnt match, bypass Up block
-    inc JetYPos
+    bne CheckP0Down
+    lda JetYPos
+    cmp #70                  ; if (player0 Y position > 70)
+    bpl CheckP0Down          ;    then: skip increment
+.P0UpPressed:
+    inc JetYPos              ;    else: increment Y position
     lda #0
-    sta JetAnimOffset        ; reset sprite animation to first frame
+    sta JetAnimOffset        ; set jet animation frame to zero
 
 CheckP0Down:
-    lda #%00100000           ; player0 joystick down
+    lda #%00100000           ; if player 0 joystick down
     bit SWCHA
-    bne CheckP0Left          ; if bit pattern doesnt match, bypass Down block
-    dec JetYPos
+    bne CheckP0Left
+    lda JetYPos
+    cmp #5                   ; if (player0 Y position < 5)
+    bmi CheckP0Left          ;    then: skip decrement
+.P0DownPressed:
+    dec JetYPos              ;    else: decrement Y position
     lda #0
-    sta JetAnimOffset        ; reset sprite animation to first frame
+    sta JetAnimOffset        ; set jet animation frame to zero
 
 CheckP0Left:
-    lda #%01000000           ; player0 joystick left
+    lda #%01000000           ; if player 0 joystick left
     bit SWCHA
-    bne CheckP0Right         ; if bit pattern doesnt match, bypass Left block
-    dec JetXPos
-    lda JET_HEIGHT           ; 9
-    sta JetAnimOffset        ; set animation offset to the second frame
+    bne CheckP0Right
+    lda JetXPos
+    cmp #35                  ; if (player0 X position < 35)
+    bmi CheckP0Right         ;    then: skip decrement
+.P0LeftPressed:
+    dec JetXPos              ;    else: decrement X position
+    lda JET_HEIGHT
+    sta JetAnimOffset        ; set new offset to display second sprite frame
 
 CheckP0Right:
-    lda #%10000000           ; player0 joystick right
+    lda #%10000000           ; if player 0 joystick right
     bit SWCHA
-    bne EndInputCheck        ; if bit pattern doesnt match, bypass Right block
-    inc JetXPos
-    lda JET_HEIGHT           ; 9
-    sta JetAnimOffset        ; set animation offset to the second frame
+    bne CheckButtonPressed
+    lda JetXPos
+    cmp #100                 ; if (player0 X position > 100)
+    bpl CheckButtonPressed   ;    then: skip increment
+.P0RightPressed:
+    inc JetXPos              ;    else: increment X position
+    lda JET_HEIGHT
+    sta JetAnimOffset        ; set new offset to display second sprite frame
+
+CheckButtonPressed:
+    lda #%10000000           ; if button is pressed
+    bit INPT4
+    bne EndInputCheck
+.ButtonPressed:
+    lda JetXPos
+    clc
+    adc #5
+    sta MissileXPos          ; set the missile X position equal to the player 0
+    lda JetYPos
+    clc
+    adc #8
+    sta MissileYPos          ; set the missile Y position equal to the player 0
 
 EndInputCheck:               ; fallback when no input was performed
 
@@ -318,6 +374,18 @@ UpdateBomberPosition:
     jmp EndPositionUpdate
 .ResetBomberPosition
     jsr GetRandomBomberPos   ; call subroutine for random bomber x-position
+    
+.SetScoreValues:
+    sed                      ; set BCD mode for score and timer values
+    lda Score
+    clc
+    adc #1
+    sta Score                ; add 1 to the Score (BCD does not like INC)
+    lda Timer
+    clc
+    adc #1
+    sta Timer                ; add 1 to the Timer (BCD does not like INC)
+    cld                      ; disable BCD after updating Score and Timer
 
 EndPositionUpdate:           ; fallback for the position update code
 
@@ -327,26 +395,29 @@ EndPositionUpdate:           ; fallback for the position update code
 CheckCollisionP0P1:
     lda #%10000000           ; CXPPMM bit 7 detects P0 and P1 collision
     bit CXPPMM               ; check CXPPMM bit 7 with the above pattern
-    bne .CollisionP0P1       ; if collision between P0 and P1 happened, branch
-    jmp CheckCollisionP0PF   ; else, skip to next check
-.CollisionP0P1:
-    jsr GameOver             ; call GameOver subroutine
-
-CheckCollisionP0PF:
-    lda #%10000000           ; CXP0FB bit 7 detects P0 and PF collision
-    bit CXP0FB               ; check CXP0FB bit 7 with the above pattern
-    bne .CollisionP0PF       ; if collision P0 and PF happened, branch
+    bne .P0P1Collided        ; if collision between P0 and P1 happened, branch
+    jsr SetTerrainRiverColor ; else, set playfield color to green/blue
     jmp EndCollisionCheck    ; else, skip to next check
-.CollisionP0PF:
+.P0P1Collided:
     jsr GameOver             ; call GameOver subroutine
 
 EndCollisionCheck:           ; fallback
-    sta CXCLR                ; clear all collision flags before the next frame
+    sta CXCLR
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loop back to start a brand new frame
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     jmp StartFrame           ; continue to display the next frame
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Set the colors for the terrain and river to green & blue
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+SetTerrainRiverColor subroutine
+    lda #$C2
+    sta TerrainColor         ; set terrain color to green
+    lda #$84
+    sta RiverColor           ; set river color to blue
+    rts
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Subroutine to handle object horizontal position with fine offset
@@ -374,7 +445,10 @@ SetObjectXPos subroutine
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 GameOver subroutine
     lda #$30
-    sta COLUBK
+    sta TerrainColor         ; set terrain color to red
+    sta RiverColor           ; set river color to red
+    lda #0
+    sta Score                ; Score = 0
     rts
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
