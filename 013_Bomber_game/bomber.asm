@@ -377,10 +377,10 @@ UpdateBomberPosition:
     
 .SetScoreValues:
     sed                      ; set BCD mode for score and timer values
-    lda Score
-    clc
-    adc #1
-    sta Score                ; add 1 to the Score (BCD does not like INC)
+    ;lda Score
+    ;clc
+    ;adc #1
+    ;sta Score                ; add 1 to the Score (BCD does not like INC)
     lda Timer
     clc
     adc #1
@@ -395,14 +395,29 @@ EndPositionUpdate:           ; fallback for the position update code
 CheckCollisionP0P1:
     lda #%10000000           ; CXPPMM bit 7 detects P0 and P1 collision
     bit CXPPMM               ; check CXPPMM bit 7 with the above pattern
-    bne .P0P1Collided        ; if collision between P0 and P1 happened, branch
-    jsr SetTerrainRiverColor ; else, set playfield color to green/blue
-    jmp EndCollisionCheck    ; else, skip to next check
+    bne .P0P1Collided        ; if collision between P0 and P1 happened, skip
+    jsr SetTerrainRiverColor ; else, set river/terrain to green/blue
+    jmp CheckCollisionM0P1   ; check next possible collision
 .P0P1Collided:
     jsr GameOver             ; call GameOver subroutine
 
+CheckCollisionM0P1:
+    lda #%10000000           ; CXM0P bit 7 detects M0 and P1 collision
+    bit CXM0P                ; check CXM0P bit 7 with the above pattern
+    bne .M0P1Collided        ; collision missile 0 and player 1 happened
+    jmp EndCollisionCheck
+.M0P1Collided:
+    sed
+    lda Score
+    clc
+    adc #1
+    sta Score                ; adds 1 to the Score using decimal mode
+    cld                      ; disable decimal mode
+    lda #0
+    sta MissileYPos          ; reset the missile position
+
 EndCollisionCheck:           ; fallback
-    sta CXCLR
+    sta CXCLR                ; clear all collision flags before the next frame
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loop back to start a brand new frame
