@@ -701,7 +701,7 @@
     246  f14c		       8a		      txa		; transfer X to A
     247  f14d		       38		      sec		; make sure carry flag is set
     248  f14e		       e5 81		      sbc	JetYPos	; subtract sprite Y coordinate
-    249  f150		       c5 09		      cmp	JET_HEIGHT	; are we inside the sprite height bounds?
+    249  f150		       c9 09		      cmp	#JET_HEIGHT	; are we inside the sprite height bounds?
     250  f152		       90 02		      bcc	.DrawSpriteP0	; if result < SpriteHeight, call subroutine
     251  f154		       a9 00		      lda	#0	; else, set lookup index to 0
     252  f156				   .DrawSpriteP0
@@ -718,7 +718,7 @@
     263  f164		       8a		      txa		; transfer X to A
     264  f165		       38		      sec		; make sure carry flag is set
     265  f166		       e5 83		      sbc	BomberYPos	; subtract sprite Y coordinate
-    266  f168		       c5 09		      cmp	BOMBER_HEIGHT	; are we inside the sprite height bounds?
+    266  f168		       c9 09		      cmp	#BOMBER_HEIGHT	; are we inside the sprite height bounds?
     267  f16a		       90 02		      bcc	.DrawSpriteP1	; if result < SpriteHeight, call subroutine
     268  f16c		       a9 00		      lda	#0	; else, set index to 0
     269  f16e				   .DrawSpriteP1
@@ -844,7 +844,7 @@
     331  f1fb		       30 06		      bmi	CheckP0Right	;    then: skip decrement
     332  f1fd				   .P0LeftPressed
     333  f1fd		       c6 80		      dec	JetXPos	;    else: decrement X position
-    334  f1ff		       a5 09		      lda	JET_HEIGHT
+    334  f1ff		       a9 09		      lda	#JET_HEIGHT
     335  f201		       85 95		      sta	JetAnimOffset	; set new offset to display second sprite frame
     336  f203
     337  f203				   CheckP0Right
@@ -856,7 +856,7 @@
     343  f20e		       10 06		      bpl	CheckButtonPressed	;    then: skip increment
     344  f210				   .P0RightPressed
     345  f210		       e6 80		      inc	JetXPos	;    else: increment X position
-    346  f212		       a5 09		      lda	JET_HEIGHT
+    346  f212		       a9 09		      lda	#JET_HEIGHT
     347  f214		       85 95		      sta	JetAnimOffset	; set new offset to display second sprite frame
     348  f216
     349  f216				   CheckButtonPressed
