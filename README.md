@@ -25,7 +25,7 @@ After several lessons of Assembly language for 6502, it is proposed to carry out
 
 Also remembering that sounds can be enabled in the game. The sounds made imitate the airplane's turbine. Uncomment the code blocks below:
 
-* **1st snippet of code:**
+* **1st code snippet:**
    ```assembly
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Calculations and tasks performed in the VBlank
@@ -53,7 +53,7 @@ Also remembering that sounds can be enabled in the game. The sounds made imitate
          sta VBLANK               ; turn off VBLANK
     
     ```
-* **2st snippet of code:**
+* **2st code snippet:**
     ```assembly
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Generate audio for the jet engine sound based on the jet y-position
