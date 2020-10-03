@@ -9,7 +9,7 @@ First, choose an IDE of your choice. During the course, I used [VSCode](https://
 $ sudo cp dasm /usr/local/bin
 ```
 
-This command allows you to use the DASM assembler from anywhere via the terminal. Through this brief presentation, it will be possible to compile all the programs through the Makefiles existing in each of the folders. After that, download the Stella emulator to run the programs. The emulator can be downloaded using the references below. After that, run the installation command:
+This command allows you to use the DASM assembler from anywhere via the terminal. Through this brief presentation, it will be possible to compile all the programs through the Makefiles existing in each of the folders. After that, download the **Stella emulator** to run the programs. The emulator can be downloaded using the references below. After that, run the installation command:
 
 ```
 $ sudo dpkg -i stella_6.2.1-1_amd64.deb
