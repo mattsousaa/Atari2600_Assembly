@@ -113,3 +113,4 @@ Also remembering that sounds can be enabled in the game. The sound mimics a jet'
 * [Asymetric Playfield TIA timing](https://www.randomterrain.com/atari-2600-lets-make-a-game-spiceware-03.html) 
 * [Gopher 2600 VCS Emulator](https://github.com/JetSetIlly/Gopher2600)
 * [AtariAge forum](https://atariage.com/forums/)
+* [C64-Wiki](https://www.c64-wiki.com/wiki/Main_Page)
