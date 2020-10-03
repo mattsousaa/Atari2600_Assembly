@@ -111,6 +111,11 @@ Reset:
 StartFrame:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Display VSYNC and VBLANK
+;; 3 lines of VSYNC
+;; 31 lines of VBLANK + 6 lines of VBLANK subroutines and tasks
+;; 10 lines of visible scoreaboard + 4 lines of padding
+;; 178 lines for the visible main game are (89 loops in a 2-line kernel)
+;; 30 lines of VBLANK Overscan
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     lda #2
     sta VBLANK               ; turn on VBLANK
