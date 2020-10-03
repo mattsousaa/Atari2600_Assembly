@@ -39,7 +39,7 @@ As can be seen, the **jet** is able to move in all possible directions and also 
 
 ![Alt Text](https://github.com/mattsousaa/Atari2600_Assembly6502/blob/master/013_Bomber_game/stella.gif)
 
-Also remembering that sounds can be enabled in the game. The sounds made imitate the airplane's turbine. Uncomment the code blocks below:
+Also remembering that sounds can be enabled in the game. The sound mimics a jet's turbine. The higher the **jet** is, the higher the sound will be. Uncomment the code blocks below:
 
 * **1st Code snippet:**
    ```assembly
