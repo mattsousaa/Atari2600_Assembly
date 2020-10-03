@@ -23,7 +23,7 @@ After several lessons of Assembly language for 6502, it is proposed to carry out
 
 ![Alt Text](https://github.com/mattsousaa/Atari2600_Assembly6502/blob/master/013_Bomber_game/stella.gif)
 
-## Reference
+## References
 ### Websites
 * [Pikuma: 6502 Assembly Language for the Atari 2600](https://courses.pikuma.com/courses/atari2600)
 * [DASM: 8-bit macro assembler](https://dasm-assembler.github.io/)
