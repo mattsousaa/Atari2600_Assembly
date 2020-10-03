@@ -27,7 +27,7 @@ The file [vcs.h](https://github.com/munsie/dasm/blob/master/machines/atari2600/v
 **0280-0297 - RIOT (I/O,Timer)** \
 **F000-FFFF - Cartridge (ROM)** 
 
-The specifications say that the Atari 2600 has 128 bytes of RAM memory… so how come the page zero addresses go from $00 to $FF? The Atari 2600's memory is indeed 128 bytes, and our page zero is 256 addresses long **($00-$FF)**. The 6502 chip has a 16-bit address bus giving it 256 available addresses (0 to 255). These addresses inform the CPU on where in memory a byte of data is located. But since the process of locating data is handled by the processor and not the actual memory (RAM), we end up with two different values. The Atari 2600 only had 128 bytes of RAM but had the ability to register the location of up to 256 total bytes of data. The remaining memory address locations are given to the TIA (read/write) and the RIOT (I/O,Timer).
+The specifications say that the Atari 2600 has 128 bytes of RAM memory… so how come the page zero addresses go from **$00** to **$FF**? The Atari 2600's memory is indeed 128 bytes, and our page zero is 256 addresses long **($00-$FF)**. The 6502 chip has a 16-bit address bus giving it 256 available addresses (0 to 255). These addresses inform the CPU on where in memory a byte of data is located. But since the process of locating data is handled by the processor and not the actual memory (RAM), we end up with two different values. The Atari 2600 only had 128 bytes of RAM but had the ability to register the location of up to 256 total bytes of data. The remaining memory address locations are given to the TIA (read/write) and the RIOT (I/O,Timer).
 
 ## Final project
 
