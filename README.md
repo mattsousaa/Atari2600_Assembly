@@ -15,7 +15,7 @@ This command allows you to use the DASM assembler from anywhere via the terminal
 $ sudo dpkg -i stella_6.2.1-1_amd64.deb
 ```
 
-The example above was an installation for the Ubuntu 20.04 system. For installation on other systems, refer to the emulator reference manual.
+The example above was an installation for the Ubuntu 20.04 system. For installation on other systems, refer to the emulator reference manual. If you don't prefer to run the codes on the machine, you can also run them in online IDEs like [Javatari](https://javatari.org/) or [8bitworkshop](https://8bitworkshop.com/v3.6.0/?file=examples%2Fhello.a&platform=vcs).
 
 
 
