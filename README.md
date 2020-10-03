@@ -3,13 +3,21 @@ Activities carried out during the [Assembly course for Atari 2600](https://cours
 
 ## Preparation of the environment
 
-First, choose an IDE of your choice. During the course, I used [VSCode](https://code.visualstudio.com/). Gustavo, in turn, used [Vim](https://vim.fandom.com/wiki/Use_Vim_like_an_IDE). After that, download the DASM assembler for 8-bit architectures available in the references link. On Linux, for example, rename the dasm.Linux.x86 file and copy it to the path:
+First, choose an IDE of your choice. During the course, I used [VSCode](https://code.visualstudio.com/). Gustavo, in turn, used [Vim](https://vim.fandom.com/wiki/Use_Vim_like_an_IDE). After that, download the DASM assembler for 8-bit architectures available in the references link. On Linux, for example, rename the **dasm.Linux.x86** file and copy it to the path:
 
 ```
 $ sudo cp dasm /usr/local/bin
 ```
 
-This command allows you to use the DASM assembler from anywhere via the terminal.
+This command allows you to use the DASM assembler from anywhere via the terminal. Through this brief presentation, it will be possible to compile all the programs through the Makefiles existing in each of the folders. After that, download the Stella emulator to run the programs. The emulator can be downloaded using the references below. After that, run the installation command:
+
+```
+$ sudo dpkg -i stella_6.2.1-1_amd64.deb
+```
+
+The example above was an installation for the Ubuntu 20.04 system. For installation on other systems, refer to the emulator reference manual.
+
+
 
 ## Reference
 ### Websites
