@@ -1,5 +1,5 @@
 # Learn Assembly Language by Making Games for the Atari 2600
-
+Activities carried out during the Assembly course for Atari 2600 with the 6052 processor. First of all, thank you Gustavo Pezzi for taking my fear out of the Assembly language during the course and making me understand such important concepts of computer architecture.
 
 ## Reference
 ### Websites
