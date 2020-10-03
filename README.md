@@ -17,6 +17,16 @@ $ sudo dpkg -i stella_6.2.1-1_amd64.deb
 
 The example above was an installation for the Ubuntu 20.04 system. For installation on other systems, refer to the emulator reference manual. If you don't prefer to run the codes on the machine, you can also run them in online IDEs like [Javatari](https://javatari.org/) or [8bitworkshop](https://8bitworkshop.com/v3.6.0/?file=examples%2Fhello.a&platform=vcs).
 
+##VCS Memory Map
+
+The file [vcs.h](https://github.com/munsie/dasm/blob/master/machines/atari2600/vcs.h) contains useful definitions of important memory space addresses. All we need to do is to add **include "vcs.h"** in beginning of our main assembly files. If we also add **include "macro.h"** we can call some useful macros that will make our lives easier. The file **macro.h** can be downloaded [here](https://github.com/munsie/dasm/blob/master/machines/atari2600/macro.h).
+
+**0000-002C - TIA (write)**
+**0030-003D - TIA (read)**
+**0080-00FF - RIOT (RAM)**
+**0280-0297 - RIOT (I/O,Timer)**
+**F000-FFFF - Cartridge (ROM)**
+
 ## Final project
 
 After several lessons of Assembly language for 6502, it is proposed to carry out a final project. The project can be consulted in the archive [bomber.asm](https://github.com/mattsousaa/Atari2600_Assembly6502/blob/master/013_Bomber_game/bomber.asm). In this project, a bomber game focused on the logic of language is carried out. Below is a gif of the final project. 
