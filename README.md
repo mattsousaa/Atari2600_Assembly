@@ -23,10 +23,37 @@ After several lessons of Assembly language for 6502, it is proposed to carry out
 
 ![Alt Text](https://github.com/mattsousaa/Atari2600_Assembly6502/blob/master/013_Bomber_game/stella.gif)
 
-Also remembering that sounds can be enabled in the game. The sounds made imitate the airplane's turbine.
+Also remembering that sounds can be enabled in the game. The sounds made imitate the airplane's turbine. Uncomment the code blocks below:
 
-* Quaternion multiplication:
-    * As an example, the `quaternion left multiplication` looks like this:
+* 1st snippet of code:
+   ```assembly
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;; Calculations and tasks performed in the VBlank
+    ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+         lda JetXPos
+         ldy #0
+         jsr SetObjectXPos        ; set player0 horizontal position <jump subroutine>
+
+         lda BomberXPos
+         ldy #1
+         jsr SetObjectXPos        ; set player1 horizontal position <jump subroutine>
+
+         lda MissileXPos
+         ldy #2
+         jsr SetObjectXPos        ; set missile horizontal position <jump subroutine>
+
+         jsr CalculateDigitOffset ; calculate scoreboard digits lookup table offset
+
+         jsr GenerateJetSound     ; configure and enable our jet engine audio 
+
+         sta WSYNC
+         sta HMOVE                ; apply the horizontal offsets previously set
+
+         lda #0
+         sta VBLANK               ; turn off VBLANK
+    
+    ```
+* 2st snippet of code:
     ```assembly
     ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; Generate audio for the jet engine sound based on the jet y-position
