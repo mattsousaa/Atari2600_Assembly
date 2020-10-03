@@ -21,7 +21,7 @@ The example above was an installation for the Ubuntu 20.04 system. For installat
 
 After several lessons of Assembly language for 6502, it is proposed to carry out a final project. The project can be consulted in the archive [bomber.asm](https://github.com/mattsousaa/Atari2600_Assembly6502/blob/master/013_Bomber_game/bomber.asm). In this project, a bomber game focused on the logic of language is carried out. Below is a gif of the final project.
 
-![Alt Text](https://github.com/mattsousaa/Atari2600_Assembly6502/blob/master/013_Bomber_game/stella.gif)
+![Alt Text](https://github.com/mattsousaa/Atari2600_Assembly6502/blob/master/013_Bomber_game/stella.gif width="150" height="100")
 
 ## Reference
 ### Websites
