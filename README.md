@@ -21,6 +21,14 @@ The example above was an installation for the Ubuntu 20.04 system. For installat
 
 The file [vcs.h](https://github.com/munsie/dasm/blob/master/machines/atari2600/vcs.h) contains useful definitions of important memory space addresses. All we need to do is to add **include "vcs.h"** in beginning of our main assembly files. If we also add **include "macro.h"** we can call some useful macros that will make our lives easier. The file **macro.h** can be downloaded [here](https://github.com/munsie/dasm/blob/master/machines/atari2600/macro.h).
 
+| Address   |      Type       |
+|-----------|:---------------:|
+| 0000-002C |  TIA (write)    |
+| 0030-003D |    TIA (read)   |  
+| 0080-00FF | RIOT (RAM)      |  
+| 0280-0297 | RIOT (I/O,Timer)|
+| F000-FFFF | Cartridge (ROM) |
+
 **0000-002C - TIA (write)** \
 **0030-003D - TIA (read)** \
 **0080-00FF - RIOT (RAM)** \
