@@ -17,7 +17,9 @@ $ sudo dpkg -i stella_6.2.1-1_amd64.deb
 
 The example above was an installation for the Ubuntu 20.04 system. For installation on other systems, refer to the emulator reference manual. If you don't prefer to run the codes on the machine, you can also run them in online IDEs like [Javatari](https://javatari.org/) or [8bitworkshop](https://8bitworkshop.com/v3.6.0/?file=examples%2Fhello.a&platform=vcs).
 
+## Final project
 
+After several lessons of Assembly language for 6502, it is proposed to carry out a final project. The project can be consulted in the archive [`013_Bomber_game/bomber.asm`](bomber.asm). In this project, a bomber game focused on the logic of language is carried out.
 
 ## Reference
 ### Websites
