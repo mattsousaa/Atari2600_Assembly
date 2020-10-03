@@ -19,7 +19,7 @@ The example above was an installation for the Ubuntu 20.04 system. For installat
 
 ## Final project
 
-After several lessons of Assembly language for 6502, it is proposed to carry out a final project. The project can be consulted in the archive [`013_Bomber_game/bomber.asm`](bomber.asm). In this project, a bomber game focused on the logic of language is carried out.
+After several lessons of Assembly language for 6502, it is proposed to carry out a final project. The project can be consulted in the archive [`https://github.com/mattsousaa/Atari2600_Assembly6502/blob/master/013_Bomber_game/bomber.asm`](bomber.asm). In this project, a bomber game focused on the logic of language is carried out.
 
 ## Reference
 ### Websites
