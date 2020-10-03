@@ -142,6 +142,8 @@ StartFrame:
 
     jsr CalculateDigitOffset ; calculate scoreboard digits lookup table offset
 
+    ;jsr GenerateJetSound     ; configure and enable our jet engine audio 
+
     sta WSYNC
     sta HMOVE                ; apply the horizontal offsets previously set
 
@@ -423,6 +425,32 @@ EndCollisionCheck:           ; fallback
 ;; Loop back to start a brand new frame
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     jmp StartFrame           ; continue to display the next frame
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Generate audio for the jet engine sound based on the jet y-position
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; The frequency/pitch will be modified based on the jet current y-position.
+;; Normally, the TIA audio frequency goes from 0 (highest) to 31 (lowest).
+;; We subtract 31 - (JetYPos/8) to achieve the desired final pitch value.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;GenerateJetSound subroutine
+;    lda #3
+;    sta AUDV0                ; set the audio volume register
+
+;    lda #8                   ; white noise (explosions)
+;    sta AUDC0                ; set the audio control register to white noise
+
+;    lda JetYPos              ; loads the accumulator with the jet y-position
+;    lsr
+;    lsr
+;    lsr                      ; divide the accumulator by 8 (using right-shifts)
+;    sta Temp                 ; save the Y/8 value in a temp variable
+;    lda #31
+;    sec
+;    sbc Temp                 ; subtract 31-(Y/8)
+;    sta AUDF0                ; set the audio frequency/pitch register
+
+;    rts
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set the colors for the terrain and river to green & blue
