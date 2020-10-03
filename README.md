@@ -25,7 +25,7 @@ The file [vcs.h](https://github.com/munsie/dasm/blob/master/machines/atari2600/v
 **0030-003D - TIA (read)** \
 **0080-00FF - RIOT (RAM)** \
 **0280-0297 - RIOT (I/O,Timer)** \
-**F000-FFFF - Cartridge (ROM)** \
+**F000-FFFF - Cartridge (ROM)** 
 
 ## Final project
 
